@@ -1,11 +1,13 @@
 <template>
   <div class="right">
       <div class="middle-box">
-        <Ztransition direction="right">
-          <keep-alive>
-            <router-view></router-view>
-          </keep-alive>
-        </Ztransition>
+        <router-view v-slot="{Component}">
+          <Ztransition direction="right">
+            <keep-alive>
+              <component :is="Component"></component>
+            </keep-alive>
+          </Ztransition>
+        </router-view>
       </div>
   </div>
 

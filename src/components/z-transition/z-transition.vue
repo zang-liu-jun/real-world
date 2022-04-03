@@ -1,7 +1,7 @@
 <template>
   <Transition
-    appear
-    :name="transitionName">
+      appear
+      :name="transitionName">
     <slot></slot> <!-- 向内传递插槽内容 -->
   </Transition>
 </template>
@@ -27,13 +27,18 @@ const transitionName = computed<string>(() => {
   animation: left-in 1s;
 }
 
-.left-transition-leave-active {
-  animation: left-in 1s reverse;
+.left-transition-leave-from {
+  display: none;
 }
+
 
 //右侧
 .right-transition-enter-active {
   animation: right-in 1s;
+}
+
+.right-transition-leave-from {
+  display: none;
 }
 
 

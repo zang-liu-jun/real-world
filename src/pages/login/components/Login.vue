@@ -1,5 +1,4 @@
 <template>
-  <!--<Ztransition direction="right">-->
     <div style="width: 26vw" class="outer">
       <div style="font-size: 24px; font-weight: bold">登录</div>
       <div>
@@ -26,12 +25,10 @@
         <el-button style="width: 100%">注册</el-button>
       </router-link>
     </div>
-  <!--</Ztransition>-->
 </template>
 
 <script setup lang="ts">
 import {ref} from "vue"
-import Ztransition from "@/components/z-transition/z-transition.vue"
 
 let email = ref<string>('')
 let password = ref<string>('')
