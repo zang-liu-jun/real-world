@@ -2,35 +2,40 @@
   <div style="width: 26vw;" class="outer">
     <div style="font-size: 24px; font-weight: bold" class="item-box">注册</div>
     <div class="item-box">
-      <el-input v-model="email" placeholder="邮箱"/>
+      <el-input v-model="userinfo.email" placeholder="邮箱"/>
     </div>
     <div class="item-box">
-      <el-input v-model="username" placeholder="用户名"/>
+      <el-input v-model="userinfo.username" placeholder="用户名" maxlength="20" show-word-limit/>
+    </div>
+    <div class="item-box" style="display: flex; justify-content: space-between">
+      <el-input v-model="verifyCode" placeholder="验证码" style="width: 50%"/>
+      <el-button @click="getCode">{{ btnContent }}</el-button>
     </div>
     <div class="item-box">
       <el-input
-          v-model="password"
+          v-model="userinfo.password"
           type="password"
-          placeholder="密码(3-20位,可包含大小写字母，数字，下划线)"
+          placeholder="密码(3-20位,大小写字母,数字,下划线)"
           show-password
           @input="passwordChange"
+          maxlength="20"
       />
-
     </div>
     <div class="item-box">
       <el-slider v-model="passwordSecurity" :step="33" show-stops class="my-slider" :disabled="true"/>
     </div>
     <div class="item-box">
       <el-input
-          v-model="confirmPassword"
+          v-model="userinfo.confirmPassword"
           type="password"
           placeholder="确认密码"
           show-password
+          maxlength="20"
       />
     </div>
 
     <div class="item-box">
-      <el-button type="primary" style="width: 100%">注册</el-button>
+      <el-button type="primary" style="width: 100%" @click="register">注册</el-button>
     </div>
     <div class="item-box">
       <router-link :to="{
@@ -44,12 +49,66 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
+import {reactive, ref} from "vue";
+import {ElMessage} from 'element-plus'
+import {getVerifyCode} from "@/service/user/getVerifyCode";
+import {fetchRegister} from "@/service/user/register";
+import {verifyEmail, verifyPassword, verifyUsername} from "@/utils/verify";
+import {useRouter} from "vue-router";
 
-let email = ref<string>('')
-let username = ref<string>('')
-let password = ref<string>('')
-let confirmPassword = ref<string>('')
+interface UserInfo {
+  email: string,
+  username: string,
+  password: string,
+  confirmPassword: string,
+}
+
+const userinfo: UserInfo = reactive({
+  email: '2417170480@qq.com',
+  username: '',
+  password: '',
+  confirmPassword: ''
+})
+
+// 验证码
+let verifyCode = ref<string>('')
+let btnContent = ref<string>('获取验证码')
+
+// 验证码定时器外层函数
+function getCodeOuter() {
+  let timer: number | null = null
+  let leftSecond = ref<number>(5)
+  return function () {
+    if (!verifyEmail(userinfo.email)) {
+      console.log(userinfo.email)
+      ElMessage.error("请输入正确的邮箱格式!")
+      return
+    }
+    if (timer === null) {
+      btnContent.value = `${leftSecond.value}s`
+      //获取验证码
+      getVerifyCode(userinfo.email)
+          .catch(err => {
+            ElMessage.error(err.message)
+          })
+      timer = window.setInterval(() => {
+        if (leftSecond.value <= 0) {
+          clearInterval(timer as any)
+          timer = null
+          btnContent.value = '获取验证码'
+          leftSecond.value = 5
+        } else {
+          leftSecond.value -= 1
+          btnContent.value = `${leftSecond.value}s`
+        }
+      }, 1000)
+    }
+  }
+}
+
+let getCode = getCodeOuter()
+
+// 密码强度
 let passwordSecurity = ref<number>(0)
 
 function passwordChange(newValue: string) {
@@ -69,6 +128,50 @@ function passwordChange(newValue: string) {
   }
 }
 
+//注册
+const router = useRouter()
+
+function register(): void {
+  let key: (keyof UserInfo)
+  for (key in userinfo) {
+    if (userinfo[key] === "") {
+      ElMessage.error('有未填项!')
+      return;
+    }
+  }
+  if (!verifyUsername(userinfo.username)) {
+    ElMessage.error('用户名格式错误!')
+    return
+  }
+  if (!verifyPassword(userinfo.password)) {
+    ElMessage.error('密码格式错误!')
+    return
+  }
+  if (userinfo.password !== userinfo.confirmPassword) {
+    ElMessage.error('两次密码输入不一致!')
+    return
+  }
+  //发送注册请求
+  fetchRegister({
+    email: userinfo.email,
+    username: userinfo.username,
+    verifyCode: verifyCode.value,
+    password: userinfo.password
+  })
+      .then(message => {
+        ElMessage({
+          message: message,
+          type: 'success',
+        })
+        router.push({
+          name: 'login'
+        })
+      })
+      .catch(err => {
+        ElMessage.error(err.message)
+      })
+}
+
 </script>
 <style>
 :root {
@@ -79,6 +182,7 @@ function passwordChange(newValue: string) {
 <style scoped lang="scss">
 .outer .item-box {
   margin-bottom: 18px;
+  min-width: 280px;
 }
 
 .my-slider {

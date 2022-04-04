@@ -23,8 +23,21 @@ import Ztransition from "@/components/z-transition/z-transition.vue"
     justify-content: center;
     width: 60vw;
     .middle-box {
-      margin-top: 30vh;
+      margin-top: 22vh;
     }
+  }
+  @media screen and (max-width: 750px) {
+    .right {
+      width: 100vw;
+      .middle-box {
+        width: 280px;
+        padding: 20px;
+        margin-top: 10vh;
+        border-radius: 10px;
+        background-color: #fff;
+      }
+    }
+
   }
 
 </style>

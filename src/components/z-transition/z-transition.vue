@@ -58,7 +58,7 @@ const transitionName = computed<string>(() => {
 
 @keyframes right-in {
   0% {
-    transform: translateX(100px);
+    transform: translateX(70px);
     opacity: 0;
   }
   50% {

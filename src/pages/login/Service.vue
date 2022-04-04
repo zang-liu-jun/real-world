@@ -1,6 +1,6 @@
 <template>
   <div class="box">
-    <LeftPart></LeftPart>
+    <LeftPart class="left"></LeftPart>
     <RightPart></RightPart>
   </div>
 
@@ -16,5 +16,14 @@ import RightPart from "./components/RightPart.vue"
   .box {
     display: flex;
     justify-content: flex-start;
+  }
+  @media screen and (max-width: 750px) {
+    .left {
+      display: none;
+    }
+    .box {
+      padding-bottom: 100vh;
+      background-color: #293146;
+    }
   }
 </style>
