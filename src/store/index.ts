@@ -1,9 +1,23 @@
 import { defineStore } from "pinia";
 
-interface userStore {}
+interface User {
+  bio:string,
+  email:string,
+  image:string,
+  username:string
+}
 
-export const useMainStore = defineStore("user", {
+let user:User={
+  bio:'',
+  email:'',
+  image:'',
+  username:''
+}
+
+export const useUserStore = defineStore("user", {
   state() {
-    return {};
+    return {
+      user
+    };
   },
 });

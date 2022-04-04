@@ -17,7 +17,7 @@
       <router-link :to="{name:'reset'}">忘记密码?</router-link>
     </div>
     <div class="item">
-      <el-button type="primary" style="width: 100%">登录</el-button>
+      <el-button type="primary" style="width: 100%" @click="login">登录</el-button>
     </div>
     <div class="item">
       <router-link :to="{
@@ -31,12 +31,49 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue"
+import {ref} from "vue";
+import {fetchLogin} from "@/service/user/login";
+import {ElMessage} from 'element-plus'
+import {useUserStore} from "@/store";
+import {useRouter} from "vue-router";
 
 let email = ref<string>('')
 let password = ref<string>('')
 
+const router=useRouter()
 
+const userStore = useUserStore()
+userStore.$subscribe((mutation, state) => {
+  localStorage.setItem("user", JSON.stringify(state))
+})
+
+function login() {
+  if (email.value === '' || password.value === '') {
+    ElMessage.error("有未填项")
+  } else {
+    fetchLogin({email: email.value, password: password.value})
+        .then(res => {
+          ElMessage({
+            message: "登录成功，即将跳转",
+            type: 'success',
+          });
+          userStore.$patch((state) => {
+            ({
+              bio: state.user.bio,
+              email: state.user.email,
+              image: state.user.image,
+              username: state.user.username
+            } = res)
+          })
+          router.push({
+            name:'home'
+          })
+        })
+        .catch(err => {
+          ElMessage.error(err.message)
+        })
+  }
+}
 </script>
 
 <style scoped>

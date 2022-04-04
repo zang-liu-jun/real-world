@@ -15,7 +15,7 @@
     },
     "allowSyntheticDefaultImports": true,
     "types": ["element-plus/global"],
-//    "noImplicitAny": false
+    "noImplicitAny": false
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
 }

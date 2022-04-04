@@ -22,7 +22,7 @@ import RightPart from "./components/RightPart.vue"
       display: none;
     }
     .box {
-      padding-bottom: 100vh;
+      padding-bottom: 60vh;
       background-color: #293146;
     }
   }
