@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 26vw;" class="outer">
+  <div class="outer">
     <div style="font-size: 24px; font-weight: bold" class="item-box">注册</div>
     <div class="item-box">
       <el-input v-model="userinfo.email" placeholder="邮箱"/>
@@ -55,7 +55,9 @@ import {getVerifyCode} from "@/service/user/getVerifyCode";
 import {fetchRegister} from "@/service/user/register";
 import {verifyEmail, verifyPassword, verifyUsername} from "@/utils/verify";
 import {useRouter} from "vue-router";
-
+import {useUserStore} from "@/store";
+const s = useUserStore();
+console.log(s.user)
 interface UserInfo {
   email: string,
   username: string,
@@ -181,10 +183,14 @@ function register(): void {
 
 <style scoped lang="scss">
 .outer .item-box {
-  margin-bottom: 18px;
-  min-width: 280px;
+  margin-bottom: 12px;
 }
 
+.outer{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
 .my-slider {
   ::v-deep .el-slider__button, {
     display: none;

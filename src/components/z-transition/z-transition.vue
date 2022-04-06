@@ -40,6 +40,16 @@ const transitionName = computed<string>(() => {
 .right-transition-leave-from {
   display: none;
 }
+.right-transition-leave-active {
+  display: none;
+}
+.right-transition-leave-to {
+  display: none;
+}
+/*.right-transition-leave-active {
+  position: absolute;
+  animation: right-in 1s reverse;
+}*/
 
 
 @keyframes left-in {
@@ -58,7 +68,7 @@ const transitionName = computed<string>(() => {
 
 @keyframes right-in {
   0% {
-    transform: translateX(70px);
+    transform: translateX(30px);
     opacity: 0;
   }
   50% {

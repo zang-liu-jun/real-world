@@ -4,13 +4,12 @@
         <router-view v-slot="{Component}">
           <Ztransition direction="right">
             <keep-alive>
-              <component :is="Component"></component>
+                <component :is="Component"></component>
             </keep-alive>
           </Ztransition>
         </router-view>
       </div>
   </div>
-
 </template>
 
 <script setup lang="ts">
@@ -21,23 +20,29 @@ import Ztransition from "@/components/z-transition/z-transition.vue"
   .right {
     display: flex;
     justify-content: center;
+    align-items: center;
     width: 60vw;
-    .middle-box {
-      margin-top: 22vh;
-    }
+    height: 100vh;
+    overflow: hidden;
   }
   @media screen and (max-width: 750px) {
     .right {
       width: 100vw;
       .middle-box {
-        width: 280px;
+        width: 50vw;
+        min-width: 300px;
         padding: 20px;
-        margin-top: 10vh;
         border-radius: 10px;
         background-color: #fff;
       }
     }
 
+  }
+  .middle-box{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
 </style>

@@ -1,8 +1,10 @@
 <template>
-  home页面
+  <main-header></main-header>
+  <router-view></router-view>
 </template>
 
 <script setup lang="ts">
+import MainHeader from "@/components/main-header/main-header.vue"
 
 </script>
 
