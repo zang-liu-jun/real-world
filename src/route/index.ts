@@ -25,6 +25,11 @@ const routes = [
         path: "publish",
         name:"publish",
         component:()=>import("@/pages/home/components/Publish.vue")
+      },
+      {
+        path:"user",
+        name:"user",
+        component:()=> import('@/pages/home/components/User.vue')
       }
     ]
   },

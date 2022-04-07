@@ -1,37 +1,35 @@
 import {defineStore} from "pinia";
 
-interface User {
-  bio: string,
-  email: string,
-  image: string,
+interface UserInfo {
   username: string
+  bio: string
+  image: string
+  email: string
 }
 
-let user: User = {
+let userinfo: UserInfo = {
+  username: '',
   bio: '',
-  email: '',
   image: '',
-  username: ''
+  email: ''
 }
 
-let token: string = ""
-
+let token: string = ''
 
 const localStorageByKey = <E>(key, initialValue: E) => {
   const temp = localStorage.getItem(key);
   let obj = {};
-  if(temp === null){
-    localStorage.setItem(key,JSON.stringify(initialValue));
+  if (temp === null) {
+    localStorage.setItem(key, JSON.stringify(initialValue));
     obj = initialValue;
-  }else {
+  } else {
     const local = JSON.parse(temp);
-    if(local instanceof Object){
+    if (local instanceof Object) {
       obj = local;
-    }else {
+    } else {
       obj = initialValue;
     }
   }
-
 
   const proxyObj = new Proxy(obj, {
     set(target: E, p: string | symbol, value: any): boolean {
@@ -42,29 +40,37 @@ const localStorageByKey = <E>(key, initialValue: E) => {
     get(target: E, p: string | symbol): any {
       return target[p];
     }
-
   })
+
   return proxyObj as E;
 }
 
 
+function ref(key, initialValue) { //非object
+  const obj = {value: initialValue};
+  return localStorageByKey(key, obj);
+}
 
-export const useUserStore =  defineStore("user", {
+
+export const useUserStore = defineStore("user", {
   state() {
-    return localStorageByKey('user',{user,token})
+    return {
+      user: localStorageByKey('user', userinfo),
+      token: ref('token', token)
+    }
   },
   actions: {
     setToken(token: string) {
-      this.token = token
+      this.token.value = token
     },
-    setUserInfo(userInfo: User) {
+    setUserInfo(res) {
       ({
         bio: this.user.bio,
-        email: this.user.email,
+        username: this.user.username,
         image: this.user.image,
-        username: this.user.username
-      } = userInfo)
-      // this.user.bio = userInfo.bio
+        email: this.user.email
+      } = res)
     }
   }
 });
+

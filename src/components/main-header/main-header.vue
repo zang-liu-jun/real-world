@@ -15,16 +15,12 @@
       </div>
       <div style="display: flex;align-items: center; gap: 20px">
         <MainInput></MainInput>
-        <el-dropdown v-if="userStore.token!==''">
-          <el-avatar :size="40" :src="userStore.user.image" @error="errorHandler" class="avatar">
-            <img
-                src="https://cube.elemecdn.com/e/fd/0fc7d20532fdaf769a25683617711png.png"
-            />
-          </el-avatar>
+        <el-dropdown v-if="userStore.token.value!==''">
+          <UserAvatar :src="userStore.user.image"></UserAvatar>
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item @click="getInPublish">写文章</el-dropdown-item>
-              <el-dropdown-item>我的主页</el-dropdown-item>
+              <el-dropdown-item @click="getInUser">我的主页</el-dropdown-item>
               <el-dropdown-item @click="logout">注销</el-dropdown-item>
             </el-dropdown-menu>
           </template>
@@ -32,24 +28,22 @@
         <div v-else class="login" @click="getInLogin">
           <span>登录</span>
         </div>
-
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {useRouter} from "vue-router";
 import {ref} from "vue";
 import MainInput from "@/components/main-header/main-input.vue"
+import UserAvatar from "@/components/main-header/user-avatar.vue"
 import {useUserStore} from "@/store";
 
 const router = useRouter()
-const userStore =useUserStore()
+const userStore = useUserStore()
 
 let currentItem = ref("")
-
-const errorHandler = () => true
 
 async function goHome() {
   await router.replace({
@@ -80,23 +74,34 @@ async function getInItem(name) {
 let searchValue = ref<string>("")
 
 
-async function getInPublish(){
+async function getInPublish() {
   await router.push({
-    name:"publish"
+    name: "publish"
   })
   location.reload()
 }
-function logout(){
-  userStore.token=''
+
+function logout() {
+  localStorage.removeItem("user");
+  localStorage.removeItem("token")
+  userStore.$reset();
 }
-function getInLogin(){
+
+function getInLogin() {
   router.push({
-    name:"login"
+    name: "login"
   })
+}
+
+async function getInUser() {
+  await router.push({
+    name: "user"
+  })
+  location.reload()
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 .header-box {
   display: flex;
   justify-content: center;
@@ -153,12 +158,11 @@ function getInLogin(){
   }
 }
 
-.avatar:hover {
-  cursor: pointer;
-}
+
 .login {
   cursor: pointer;
   transition: all 0.5s;
+
   &:hover {
     color: $main-blue;
   }

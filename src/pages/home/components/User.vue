@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-avatar :size="50" :src="circleUrl" />
+    用户首页
   </div>
 </template>
 

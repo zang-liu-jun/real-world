@@ -44,9 +44,6 @@ const router = useRouter()
 
 const userStore = useUserStore()
 
-
-
-
 function login() {
   if (email.value === '' || password.value === '') {
     ElMessage.error("有未填项")
@@ -57,8 +54,8 @@ function login() {
             message: "登录成功，即将跳转",
             type: 'success',
           });
-          userStore.setUserInfo(res)
           userStore.setToken(res.token)
+          userStore.setUserInfo(res)
           router.push({
             name: 'home'
           })
