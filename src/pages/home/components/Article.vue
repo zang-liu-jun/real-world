@@ -6,7 +6,6 @@
 
 <script setup lang="ts">
 import TagsContainer from "@/components/tags-container/tags-container.vue"
-
 </script>
 
 <style scoped lang="scss">

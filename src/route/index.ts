@@ -22,11 +22,6 @@ const routes = [
         component:()=>import("@/pages/home/components/AboutUs.vue")
       },
       {
-        path: "publish",
-        name:"publish",
-        component:()=>import("@/pages/home/components/Publish.vue")
-      },
-      {
         path:"user",
         name:"user",
         component:()=> import('@/pages/home/components/User.vue')
@@ -55,6 +50,11 @@ const routes = [
         component:()=> import('@/pages/login/components/Reset.vue')
       }
     ]
+  },
+  {
+    path: "/publish",
+    name:"publish",
+    component:()=>import("@/pages/home/components/Publish/Publish.vue")
   }
 ]
 
