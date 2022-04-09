@@ -56,7 +56,7 @@ export const useUserStore = defineStore("user", {
   state() {
     return {
       user: localStorageByKey('user', userinfo),
-      token: ref('token', token)
+      token: ref('token', token),
     }
   },
   actions: {
@@ -70,7 +70,7 @@ export const useUserStore = defineStore("user", {
         image: this.user.image,
         email: this.user.email
       } = res)
-    }
+    },
   }
 });
 
